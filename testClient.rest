@@ -1,0 +1,106 @@
+
+// for testing / demonstration
+
+GET http://localhost:3000/api/products
+
+###
+
+GET http://localhost:3000/api/products?offset=1&limit=1
+
+
+###
+// SUCCEEDS: Broccoflow is added to the Products table and one variant is added to the ProductVariant table
+POST http://localhost:3000/api/products HTTP/1.1
+Content-type: application/json
+
+{
+    "name": "Broccoflower",
+    "seller": "Chuck E Cheese"
+}
+
+###
+// SUCCEEDS: Poptarts added as a Product and 3 rows are appended to ProductVariant
+//           Strawberry, Blueberry and Flavorless are added to the Flavor table
+POST http://localhost:3000/api/products
+Content-type: application/json
+
+{
+    "name": "Poptarts",
+    "variants": {
+        "flavor": [
+            "Strawberry",
+            "Blueberry",
+            "Flavorless"
+        ]
+    }
+}
+###
+// SUCCEEDS: Cookies added as a Product with 12 new additions to the ProductVariant table
+//           Plain, Chocolate and Extreme are added to Flavor. Flavorless is already there.
+//           2 Count, 4 Count and Classic 56 Count are added to Quantity
+POST http://localhost:3000/api/products
+Content-type: application/json
+
+{
+    "name": "NASA's Trademark Cookies",
+    "variants": {
+        "flavor": [
+            "Plain",
+            "Chocolate",
+            "Flavorless",
+            "Extreme"
+        ],
+        "quantity": [
+            "2 Count",
+            "4 Count",
+            "Classic 56 Count"
+        ]
+    },
+    "seller": "NASA"
+}
+
+
+###
+// SUCCEEDS: Chips is added as a Product, 6 new entries in ProductVariant
+//           Big, Large and American are added to the Size table
+//           0 Count is added to Quantity table
+POST http://localhost:3000/api/products
+Content-type: application/json
+
+{
+    "name": "Bold Chips",
+    "variants": {
+        "size": [
+            "Big",
+            "Large",
+            "American"
+        ],
+        "quantity": [
+            "0 Count",
+            "Classic 56 Count"
+        ]
+    },
+    "seller": "Bold Chips USA"
+}
+
+
+###
+// FAILS: Carat is not a table
+//        So Diamonds is not added as a product and
+//        Extra Large is not added to the Size table
+POST http://localhost:3000/api/products
+Content-type: application/json
+
+{
+    "name": "Diamonds",
+    "variants": {
+        "size": [
+            "Extra Large",
+            "American"
+        ],
+        "carat": [
+            "1",
+            "MAX"
+        ]
+    }
+}
